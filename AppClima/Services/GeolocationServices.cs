@@ -27,11 +27,8 @@ namespace AppClima.Services
                 {
                     return location;
                 }
-
-                else
-                {
-                    throw new Exception("Unable to get location");
-                }
+                //throw new Exception("Unable to get location");
+               
             }
             // Catch one of the following exceptions:
             //   FeatureNotSupportedException
@@ -45,11 +42,11 @@ namespace AppClima.Services
             {
                 _isCheckingLocation = false;
             }
-            /*return new Location
+            return new Location
             {
                 Latitude = 0,
                 Longitude = 0,
-            };*/
+            };
         }
 
         public void CancelRequest()

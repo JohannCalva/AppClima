@@ -1,4 +1,5 @@
 ﻿using AppClima.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,12 @@ namespace AppClima.Services
 {
     public class WeatherServices
     {
+        public async Task<WeatherData> GetCurrentLocationWeatherAsync()
+        {
+            GeolocationServices geolocationServices = new GeolocationServices();
+            Location location = await geolocationServices.GetCurrentLocation();
+            return await GetWeatherDataFromLocationAsync(location.Latitude, location.Longitude);
+        }
         public async Task<WeatherData> GetWeatherDataFromLocationAsync(double latitude, double longitude)
         {
             string latitude_str = latitude.ToString().Replace(",", ".");
@@ -19,7 +26,10 @@ namespace AppClima.Services
             using (HttpClient client = new HttpClient())
             {
                 var response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
                 var result = await response.Content.ReadAsStringAsync();
+                WeatherData data = JsonConvert.DeserializeObject<WeatherData>(result);
+                return data;
             }
         }
     }
